@@ -1,6 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
-const bcrypt = require("bcryptjs");
+const { hashPassword } = require("../helpers/bcrypt");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -15,18 +15,41 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      username: DataTypes.STRING,
-      secret: DataTypes.STRING,
-      firstTime: DataTypes.STRING,
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: { msg: "Username must be unique" },
+        validate: {
+          notNull: { msg: "Username is required" },
+          notEmpty: { msg: "Username is required" },
+        },
+      },
+      secret: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "Password is required" },
+          notEmpty: { msg: "Password is required" },
+        },
+      },
+      firstTime: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "firstTime is required" },
+          notEmpty: { msg: "firstTime is required" },
+        },
+      },
     },
     {
       sequelize,
       modelName: "User",
     }
   );
-  User.beforeCreate((el) => {
-    el.secret = bcrypt.hashSync(el.secret);
-    el.firstTime = false;
+
+  User.beforeCreate((user) => {
+    //user or instance refer to User
+    user.secret = hashPassword(user.secret);
   });
   return User;
 };

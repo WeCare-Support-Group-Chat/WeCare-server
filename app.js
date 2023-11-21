@@ -22,6 +22,7 @@
 // //global
 // app.use(errorHandler);
 
+// const port = 3000;
 const cors = require("cors");
 const router = require("./routes");
 const express = require("express");
@@ -36,5 +37,9 @@ app.use(router);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`);
+// });
 
 module.exports = app;

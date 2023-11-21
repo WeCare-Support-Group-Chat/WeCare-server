@@ -15,8 +15,22 @@ module.exports = (sequelize, DataTypes) => {
   }
   UserGroup.init(
     {
-      UserId: DataTypes.INTEGER,
-      GroupId: DataTypes.INTEGER,
+      UserId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "UserId is required" },
+          notEmpty: { msg: "UserId is required" },
+        },
+      },
+      GroupId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "GroupId is required" },
+          notEmpty: { msg: "GroupId is required" },
+        },
+      },
     },
     {
       sequelize,
