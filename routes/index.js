@@ -3,17 +3,18 @@ const router = express.Router();
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
 const Controller = require("../controllers/controller");
+const { authN } = require("../helpers/bcrypt");
 
 //PUBLIC
-router.post("/login", Controller.login);
 router.post("/register", Controller.register);
+router.post("/login", Controller.login);
 
 //Require Authentication
-router.use(authentication);
+router.use(authN);
 router.post("/usergroup", Controller.addGroupToUser);
 router.get("/usergroup", Controller.showGroupOfUser);
 
 //Require Authentication & Authorization
-router.delete("/usergroup/:id", authorization, Controller.deleteGroupOfUser);
+router.put("/usergroup/:id", Controller.deleteGroupOfUser);
 
 module.exports = router;
