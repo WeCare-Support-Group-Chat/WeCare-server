@@ -1,0 +1,5 @@
+npx sequelize-cli model:generate --name User --attributes username:string,secret:string
+npx sequelize-cli model:generate --name Group --attributes title:string,information:string
+npx sequelize-cli model:generate --name UserGroup --attributes UserId:integer,GroupId:integer 
+
+npx sequelize-cli seed:generate --name seedGroups
