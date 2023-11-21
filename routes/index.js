@@ -7,7 +7,7 @@ const authentication = require("../middlewares/authentication");
 router.post("/register", Controller.registerToPostgresAndCE);
 router.post("/loginToPostgres", Controller.loginToPostgres);
 router.patch("/user", authentication, Controller.updateFirstTimeColumnPostgres);
-// router.post("/loginToCE", authentication, Controller.loginToCE);
+router.post("/loginToCE", authentication, Controller.loginToCE);
 //validation
 //Error handler (part sendiri)
 //API

@@ -46,11 +46,11 @@ class Controller {
       });
 
       if (!user) {
-        throw new Error("Username/password is not given");
+        throw new Error("Data not found");
       }
 
       if (!comparePassword(p, user.secret)) {
-        throw new Error("Password given wrong / not match");
+        throw new Error("Invalid email/password");
       }
 
       const payload = {
@@ -91,19 +91,18 @@ class Controller {
     }
   }
 
-  // static async loginToCE(req, res, next) {
-  //   try {
-  //     const { id, username } = req.loginInfo;
+  static async loginToCE(req, res, next) {
+    try {
+      const { id, username } = req.loginInfo;
 
-  //     res.status(200).json({
-  //       access_token: token,
-  //       username: user.username,
-  //       firstTime: firstTimeOrNot.firstTime,
-  //     });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+      res.status(200).json({
+        projectID: CHAT_ENGINE_PRIVATE_KEY,
+        userName: username,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = Controller;

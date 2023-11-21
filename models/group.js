@@ -14,8 +14,22 @@ module.exports = (sequelize, DataTypes) => {
   }
   Group.init(
     {
-      title: DataTypes.STRING,
-      information: DataTypes.STRING,
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "Title is required" },
+          notEmpty: { msg: "Title is required" },
+        },
+      },
+      information: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "Information is required" },
+          notEmpty: { msg: "Information is required" },
+        },
+      },
     },
     {
       sequelize,
