@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "title":"Depression",
+        "information":"Depression is a mood disorder that causes persistent feelings of sadness, hopelessness, and a lack of interest in activities."
+    },
+    {
+        "id": 2,
+        "title":"Anxiety Disorders",
+        "information":"Anxiety disorders involve excessive worry, fear, or nervousness. They can manifest as generalized anxiety disorder, panic disorder, social anxiety disorder, or specific phobias."
+    },
+    {
+        "id": 3,
+        "title":"Schizophrenia",
+        "information": "Schizophrenia is a severe mental disorder that affects a person's thinking, emotions, and behavior."
+    },
+    {
+        "id": 4,
+        "title":"Bipolar Disorder",
+        "information": "Bipolar disorder, also known as manic-depressive illness, involves mood swings between episodes of mania and depression."
+    },
+    {
+        "id": 5,
+        "title":"Diabetes Mellitus",
+        "information": "Diabetes is a chronic condition that affects the body's ability to regulate blood sugar."
+    },
+    {
+        "id": 6,
+        "title":"Hypertension",
+        "information":"Hypertension is a condition where the force of blood against the artery walls is consistently too high. It can lead to serious health problems, such as heart disease and stroke."
+    },
+    {
+        "id": 7,
+        "title":"Osteoarthritis",
+        "information": "Osteoarthritis is a degenerative joint disease that occurs when the protective cartilage that cushions the ends of bones wears down over time."
+    },
+    {
+        "id": 8,
+        "title":"Asthma",
+        "information": "Asthma is a chronic respiratory condition that causes inflammation and narrowing of the airways, leading to difficulty breathing, coughing, and wheezing."
+    }
+]
