@@ -12,7 +12,6 @@ Routes below need authentication:
 - `PATCH /user`
 - `POST /loginToCE`
 - `POST /usergroup`
-- `GET /usergroup`
 - `PUT /usergroup/:id`
 
 ## 1. POST /register
@@ -153,6 +152,93 @@ Response (201 - Created)
 {
   "PROJECT_ID": "string",
   "USER_NAME": "string"
+}
+```
+
+Response (401 - Unauthorized)
+
+```json
+{
+  "message": "Invalid token"
+}
+```
+
+Response (404 - Not Found)
+
+```json
+{
+  "message": "Data not found"
+}
+```
+
+## 5. POST /usergroup
+
+Request:
+
+- headers:
+
+```json
+{
+  "Authorization": "Bearer <string token>"
+}
+```
+
+Response (201 - Created)
+
+```json
+{ "message": "success" }
+```
+
+Response (401 - Unauthorized)
+
+```json
+{
+  "message": "Invalid token"
+}
+```
+
+Response (404 - Not Found)
+
+```json
+{
+  "message": "Data not found"
+}
+```
+
+## 6. PUT /usergroup/:id
+
+Request:
+
+- headers:
+
+```json
+{
+  "Authorization": "Bearer <string token>"
+}
+```
+
+- params:
+
+```json
+{
+  "id": "integer"
+}
+```
+
+Response (200 - OK)
+
+```json
+{
+  "person": {
+    "username": "string",
+    "first_name": "",
+    "last_name": "",
+    "avatar": null,
+    "custom_json": "{}",
+    "is_online": "boolean"
+  },
+  "chat_updated": "string",
+  "last_read": null
 }
 ```
 
