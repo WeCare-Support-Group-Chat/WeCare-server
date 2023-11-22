@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: { msg: "Username must be unique" },
+        unique: true,
         validate: {
           notNull: { msg: "Username is required" },
           notEmpty: { msg: "Username is required" },
@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
+          min: 5,
           notNull: { msg: "Password is required" },
           notEmpty: { msg: "Password is required" },
         },

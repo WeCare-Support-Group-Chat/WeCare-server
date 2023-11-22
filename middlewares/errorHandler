@@ -9,6 +9,27 @@ const errorHandler = (err, req, res, next) => {
   } else if (err.message === "Data Not Found") {
     status = 404;
     message = "Data Not Found";
+  } else if (err.name === "SequelizeValidationError") {
+    status = 400;
+    message = err.errors[0].message;
+  } else if (err.name === "SequelizeUniqueConstraintError") {
+    status = 400;
+    message = err.errors[0].message;
+  } else if (err.message === "Password must be at least 5 characters long") {
+    status = 400;
+    message = err.message;
+  } else if (err.message === "Username is required") {
+    code = 400;
+    message = "Username is required";
+  } else if (err.message === "Password is required") {
+    code = 400;
+    message = "Password is required";
+  } else if (err.message === "Invalid username/password") {
+    code = 401;
+    message = "Invalid username/password";
+  } else if (err.name === "JsonWebTokenError") {
+    code = 401;
+    message = "Invalid token";
   }
 
   res.status(status).json({ message });
