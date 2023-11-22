@@ -114,27 +114,12 @@ class Controller {
 
   static async addGroupToUser(req, res, next) {
     try {
-      const [group] = req.body;
+      // // console.log(req.body);
+      // const { group } = req.body;
+      // console.log(group);
+      // console.log(req.params);
+      const group = ["214844", "214845", "214848"];
 
-      // const data = group.map((el) => {
-      //   console.log(el);
-      //   return el;
-      // });
-
-      // group.forEach(el => {
-      //   const r2 = await axios.post(
-      //     `https://api.chatengine.io/chats/${el}/people/`,
-      //     { username: "akbar" },
-      //     {
-      //       headers: {
-      //         "Project-ID": "ce7d3869-0c1b-4129-9299-5428dc2cd481",
-      //         "User-Name": "cecep",
-      //         "User-Secret": "cecep",
-      //       },
-      //     }
-      //   );
-      // })
-      // let r2;
       for (const el of group) {
         const r2 = await axios.post(
           `https://api.chatengine.io/chats/${el}/people/`,
@@ -147,8 +132,8 @@ class Controller {
             },
           }
         );
-        res.status(r2.status).json(r2.data);
       }
+      res.status(201).json({ message: "success" });
 
       // console.log(r2);
     } catch (error) {
@@ -158,17 +143,17 @@ class Controller {
   }
 
   //? bingung
-  static async showGroupOfUser(req, res, next) {
-    try {
-    } catch (error) {
-      next(error);
-    }
-  }
+  // static async showGroupOfUser(req, res, next) {
+  //   try {
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 
   static async deleteGroupOfUser(req, res, next) {
     try {
       const { id } = req.params;
-
+      console.log(req.loginInfo, ">>>>>>>>>>>>");
       const r = await axios.put(
         `https://api.chatengine.io/chats/${id}/people/`,
         { username: req.loginInfo.username },
