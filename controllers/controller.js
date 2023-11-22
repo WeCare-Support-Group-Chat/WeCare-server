@@ -158,12 +158,22 @@ class Controller {
   }
 
   //? bingung
-  // static async showGroupOfUser(req, res, next) {
-  //   try {
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+  static async showGroupOfUser(req, res, next) {
+    try {
+      const user = req.loginInfo;
+      console.log(user);
+
+      const data = await UserGroup.findAll({
+        where: { UserId: user.id },
+        include: {
+          model: Group,
+        },
+      });
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   static async deleteGroupOfUser(req, res, next) {
     try {
