@@ -10,8 +10,8 @@ List of available endpoints:
 Routes below need authentication:
 
 - `PATCH /user`
-- `POST /loginToCE`
 - `POST /usergroup`
+- `GET /usergroup`
 - `PUT /usergroup/:id`
 
 ## 1. POST /register
@@ -134,9 +134,9 @@ Response (404 - Not Found)
 }
 ```
 
-## 4. POST /loginToCE
+## 4. POST /usergroup
 
-### Request
+Request:
 
 - headers:
 
@@ -146,13 +146,20 @@ Response (404 - Not Found)
 }
 ```
 
+- body:
+
+```json
+[
+  { "id": "integer", "title": "string" },
+  { "id": "integer", "title": "string" },
+  { "id": "integer", "title": "string" }
+]
+```
+
 Response (201 - Created)
 
 ```json
-{
-  "PROJECT_ID": "string",
-  "USER_NAME": "string"
-}
+{ "message": "success" }
 ```
 
 Response (401 - Unauthorized)
@@ -171,7 +178,7 @@ Response (404 - Not Found)
 }
 ```
 
-## 5. POST /usergroup
+## 5. GET /usergroup
 
 Request:
 
@@ -183,10 +190,25 @@ Request:
 }
 ```
 
-Response (201 - Created)
+Response (200 - OK)
 
 ```json
-{ "message": "success" }
+[
+  {
+    "id": "integer",
+    "UserId": "integer",
+    "GroupId": "integer",
+    "createdAt": "date",
+    "updatedAt": "date",
+    "Group": {
+      "id": "integer",
+      "title": "string",
+      "information": "string",
+      "createdAt": "date",
+      "updatedAt": "date"
+    }
+  }
+]
 ```
 
 Response (401 - Unauthorized)

@@ -99,19 +99,6 @@ class Controller {
     }
   }
 
-  static async loginToCE(req, res, next) {
-    try {
-      const { id, username } = req.loginInfo;
-
-      res.status(200).json({
-        PROJECT_ID: "ce7d3869-0c1b-4129-9299-5428dc2cd481",
-        USER_NAME: username,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async addGroupToUser(req, res, next) {
     try {
       //   console.log(req.body, "========================"ss);
@@ -157,11 +144,10 @@ class Controller {
     }
   }
 
-  //? bingung
   static async showGroupOfUser(req, res, next) {
     try {
       const user = req.loginInfo;
-      console.log(user);
+      //console.log(user);
 
       const data = await UserGroup.findAll({
         where: { UserId: user.id },
@@ -169,6 +155,7 @@ class Controller {
           model: Group,
         },
       });
+
       res.status(200).json(data);
     } catch (error) {
       next(error);
