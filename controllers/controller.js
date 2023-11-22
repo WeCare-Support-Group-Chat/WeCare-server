@@ -27,7 +27,6 @@ class Controller {
 			);
 
 			//res.status(data.status).json(data);
-			////////////////////////////
 			res
 				.status(201)
 				.json({message: `User id ${response.id} successfully created!`});
