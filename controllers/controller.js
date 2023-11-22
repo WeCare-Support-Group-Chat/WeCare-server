@@ -8,25 +8,29 @@ class Controller {
     try {
       const { username: u, password: p } = req.body; //dapat dari UI kita
 
-      //register ke CE
-      const data = await axios.post(
-        `https://api.chatengine.io/users/`,
-        { username: u, secret: p },
-        { headers: { "private-key": CHAT_ENGINE_PRIVATE_KEY } }
-      );
-      // res.status(data.status).json(data.data);
-
       //register ke Postgres
       const newUser = {
         username: u,
         secret: p,
         firstTime: "true",
       };
+      if (p.length < 5) {
+        throw new Error("Password must be at least 5 characters long");
+      }
       const response = await User.create(newUser);
+
+      //register ke CE
+      const data = await axios.post(
+        `https://api.chatengine.io/users/`,
+        { username: u, secret: p },
+        { headers: { "private-key": CHAT_ENGINE_PRIVATE_KEY } }
+      );
+
+      //res.status(data.status).json(data);
 
       res
         .status(201)
-        .json({ msg: `User id ${response.id} successfully created!` });
+        .json({ message: `User id ${response.id} successfully created!` });
     } catch (error) {
       next(error);
     }
@@ -36,8 +40,12 @@ class Controller {
     try {
       const { username: u, password: p } = req.body; //dapat dari UI kita
 
-      if (!u || !p) {
-        throw new Error("Username/password is not given");
+      if (!u) {
+        throw new Error("Username is required");
+      }
+
+      if (!p) {
+        throw new Error("Password is required");
       }
 
       const user = await User.findOne({
@@ -45,11 +53,11 @@ class Controller {
       });
 
       if (!user) {
-        throw new Error("Data not found");
+        throw new Error("Invalid username/password");
       }
 
       if (!comparePassword(p, user.secret)) {
-        throw new Error("Invalid email/password");
+        throw new Error("Invalid username/password");
       }
 
       const payload = {
@@ -83,7 +91,7 @@ class Controller {
         }
       );
       res.status(200).json({
-        msg: `User id ${response.id} firstTime column successfully updated!`,
+        message: `User id ${id} firstTime column successfully updated!`,
       });
     } catch (error) {
       next(error);
@@ -95,8 +103,8 @@ class Controller {
       const { id, username } = req.loginInfo;
 
       res.status(200).json({
-        projectID: CHAT_ENGINE_PRIVATE_KEY,
-        userName: username,
+        PROJECT_ID: "ce7d3869-0c1b-4129-9299-5428dc2cd481",
+        USER_NAME: username,
       });
     } catch (error) {
       next(error);

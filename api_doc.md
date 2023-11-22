@@ -11,6 +11,9 @@ Routes below need authentication:
 
 - `PATCH /user`
 - `POST /loginToCE`
+- `POST /usergroup`
+- `GET /usergroup`
+- `PUT /usergroup/:id`
 
 ## 1. POST /register
 
@@ -29,7 +32,7 @@ Response (201 - Created)
 
 ```json
 {
-  "User id ${response.id} successfully created!"
+  "message": "User id ${response.id} successfully created!"
 }
 ```
 
@@ -41,11 +44,15 @@ Response (400 - Bad Request)
 }
 OR
 {
-  "message": "Username must be unique"
+  "message": "username must be unique"
 }
 OR
 {
   "message": "Password is required"
+}
+OR
+{
+  "message": "Password must be at least 5 characters long"
 }
 ```
 
@@ -88,7 +95,72 @@ Response (401 - Unauthorized)
 
 ```json
 {
-  "message": "Invalid email/password"
+  "message": "Invalid username/password"
+}
+```
+
+## 3. PATCH /user
+
+Request:
+
+- headers:
+
+```json
+{
+  "Authorization": "Bearer <string token>"
+}
+```
+
+Response (200 - OK)
+
+```json
+{
+  "message": "User id ${id} firstTime column successfully updated!"
+}
+```
+
+Response (401 - Unauthorized)
+
+```json
+{
+  "message": "Invalid token"
+}
+```
+
+Response (404 - Not Found)
+
+```json
+{
+  "message": "Data not found"
+}
+```
+
+## 4. POST /loginToCE
+
+### Request
+
+- headers:
+
+```json
+{
+  "Authorization": "Bearer <string token>"
+}
+```
+
+Response (201 - Created)
+
+```json
+{
+  "PROJECT_ID": "string",
+  "USER_NAME": "string"
+}
+```
+
+Response (401 - Unauthorized)
+
+```json
+{
+  "message": "Invalid token"
 }
 ```
 
