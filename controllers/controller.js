@@ -22,12 +22,12 @@ class Controller {
 			//register ke CE
 			const data = await axios.post(
 				`https://api.chatengine.io/users/`,
-				{username: u, secret: p},
+				{username: u, secret: u},
 				{headers: {"private-key": CHAT_ENGINE_PRIVATE_KEY}}
 			);
 
 			//res.status(data.status).json(data);
-
+			////////////////////////////
 			res
 				.status(201)
 				.json({message: `User id ${response.id} successfully created!`});
