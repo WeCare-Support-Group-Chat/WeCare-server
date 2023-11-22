@@ -6,13 +6,13 @@ const { User, Group, UserGroup } = require("../models");
 class Controller {
   static async registerToPostgresAndCE(req, res, next) {
     try {
-      const { username: u, password: p } = req.body; //dapat dari UI kita
-
+      const { username: u, secret: p } = req.body; //dapat dari UI kita
+      // console.log(u, p, "============");
       //register ke CE
-      const data = await axios.post(
+      const data = await axios.put(
         `https://api.chatengine.io/users/`,
-        { username: u, secret: p },
-        { headers: { "private-key": CHAT_ENGINE_PRIVATE_KEY } }
+        { username: u, secret: u },
+        { headers: { "private-key": "b3d31801-81a9-4188-a349-704463c2cae7" } }
       );
       // res.status(data.status).json(data.data);
 
@@ -28,6 +28,7 @@ class Controller {
         .status(201)
         .json({ msg: `User id ${response.id} successfully created!` });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -105,7 +106,7 @@ class Controller {
 
   static async addGroupToUser(req, res, next) {
     try {
-      const group = ["214844", "214845", "214846", "214847", "214848"];
+      const [group] = req.body;
 
       // const data = group.map((el) => {
       //   console.log(el);
@@ -148,6 +149,7 @@ class Controller {
     }
   }
 
+  //? bingung
   static async showGroupOfUser(req, res, next) {
     try {
     } catch (error) {
