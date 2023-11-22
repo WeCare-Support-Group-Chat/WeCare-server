@@ -10,7 +10,6 @@ List of available endpoints:
 Routes below need authentication:
 
 - `PATCH /user`
-- `POST /loginToCE`
 - `POST /usergroup`
 - `GET /usergroup`
 - `PUT /usergroup/:id`
@@ -135,9 +134,9 @@ Response (404 - Not Found)
 }
 ```
 
-## 4. POST /loginToCE
+## 4. POST /usergroup
 
-### Request
+Request:
 
 - headers:
 
@@ -147,12 +146,121 @@ Response (404 - Not Found)
 }
 ```
 
+- body:
+
+```json
+[
+  { "id": "integer", "title": "string" },
+  { "id": "integer", "title": "string" },
+  { "id": "integer", "title": "string" }
+]
+```
+
 Response (201 - Created)
 
 ```json
+{ "message": "success" }
+```
+
+Response (401 - Unauthorized)
+
+```json
 {
-  "PROJECT_ID": "string",
-  "USER_NAME": "string"
+  "message": "Invalid token"
+}
+```
+
+Response (404 - Not Found)
+
+```json
+{
+  "message": "Data not found"
+}
+```
+
+## 5. GET /usergroup
+
+Request:
+
+- headers:
+
+```json
+{
+  "Authorization": "Bearer <string token>"
+}
+```
+
+Response (200 - OK)
+
+```json
+[
+  {
+    "id": "integer",
+    "UserId": "integer",
+    "GroupId": "integer",
+    "createdAt": "date",
+    "updatedAt": "date",
+    "Group": {
+      "id": "integer",
+      "title": "string",
+      "information": "string",
+      "createdAt": "date",
+      "updatedAt": "date"
+    }
+  }
+]
+```
+
+Response (401 - Unauthorized)
+
+```json
+{
+  "message": "Invalid token"
+}
+```
+
+Response (404 - Not Found)
+
+```json
+{
+  "message": "Data not found"
+}
+```
+
+## 6. PUT /usergroup/:id
+
+Request:
+
+- headers:
+
+```json
+{
+  "Authorization": "Bearer <string token>"
+}
+```
+
+- params:
+
+```json
+{
+  "id": "integer"
+}
+```
+
+Response (200 - OK)
+
+```json
+{
+  "person": {
+    "username": "string",
+    "first_name": "",
+    "last_name": "",
+    "avatar": null,
+    "custom_json": "{}",
+    "is_online": "boolean"
+  },
+  "chat_updated": "string",
+  "last_read": null
 }
 ```
 

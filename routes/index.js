@@ -7,7 +7,6 @@ router.post("/register", Controller.registerToPostgresAndCE);
 router.post("/loginToPostgres", Controller.loginToPostgres);
 //Require Authentication
 router.patch("/user", authentication, Controller.updateFirstTimeColumnPostgres);
-router.post("/loginToCE", authentication, Controller.loginToCE);
 router.post("/usergroup", authentication, Controller.addGroupToUser);
 router.get("/usergroup", authentication, Controller.showGroupOfUser);
 router.put("/usergroup/:id", authentication, Controller.deleteGroupOfUser);

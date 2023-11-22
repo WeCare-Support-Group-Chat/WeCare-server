@@ -1,31 +1,32 @@
-const {default: axios} = require("axios");
+const { default: axios } = require("axios");
 const CHAT_ENGINE_PRIVATE_KEY = process.env.CHAT_ENGINE_PRIVATE_KEY;
-const {comparePassword} = require("../helpers/bcrypt");
-const {signToken} = require("../helpers/jwt");
-const {User, Group, UserGroup} = require("../models");
+const { comparePassword } = require("../helpers/bcrypt");
+const { signToken } = require("../helpers/jwt");
+const { User, Group, UserGroup } = require("../models");
 class Controller {
-	static async registerToPostgresAndCE(req, res, next) {
-		try {
-			const {username: u, password: p} = req.body; //dapat dari UI kita
+  static async registerToPostgresAndCE(req, res, next) {
+    try {
+      const { username: u, password: p } = req.body; //dapat dari UI kita
 
-			//register ke Postgres
-			const newUser = {
-				username: u,
-				secret: p,
-				firstTime: "true",
-			};
-			if (p.length < 5) {
-				throw new Error("Password must be at least 5 characters long");
-			}
-			const response = await User.create(newUser);
+      //register ke Postgres
+      const newUser = {
+        username: u,
+        secret: p,
+        firstTime: "true",
+      };
+      if (p.length < 5) {
+        throw new Error("Password must be at least 5 characters long");
+      }
+      const response = await User.create(newUser);
 
-			//register ke CE
-			const data = await axios.post(
-				`https://api.chatengine.io/users/`,
-				{username: u, secret: u},
-				{headers: {"private-key": CHAT_ENGINE_PRIVATE_KEY}}
-			);
+      //register ke CE
+      const data = await axios.post(
+        `https://api.chatengine.io/users/`,
+        { username: u, secret: u },
+        { headers: { "private-key": CHAT_ENGINE_PRIVATE_KEY } }
+      );
 
+<<<<<<< HEAD
 			//res.status(data.status).json(data);
 			res
 				.status(201)
@@ -35,163 +36,165 @@ class Controller {
 			next(error);
 		}
 	}
+=======
+      //res.status(data.status).json(data);
+      ////////////////////////////
+      res
+        .status(201)
+        .json({ message: `User id ${response.id} successfully created!` });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+>>>>>>> e232e53235349ea803750222255a6a380277b2d9
 
-	static async loginToPostgres(req, res, next) {
-		try {
-			const {username: u, password: p} = req.body; //dapat dari UI kita
+  static async loginToPostgres(req, res, next) {
+    try {
+      const { username: u, password: p } = req.body; //dapat dari UI kita
 
-			if (!u) {
-				throw new Error("Username is required");
-			}
+      if (!u) {
+        throw new Error("Username is required");
+      }
 
-			if (!p) {
-				throw new Error("Password is required");
-			}
+      if (!p) {
+        throw new Error("Password is required");
+      }
 
-			const user = await User.findOne({
-				where: {username: u},
-			});
+      const user = await User.findOne({
+        where: { username: u },
+      });
 
-			if (!user) {
-				throw new Error("Invalid username/password");
-			}
+      if (!user) {
+        throw new Error("Invalid username/password");
+      }
 
-			if (!comparePassword(p, user.secret)) {
-				throw new Error("Invalid username/password");
-			}
+      if (!comparePassword(p, user.secret)) {
+        throw new Error("Invalid username/password");
+      }
 
-			const payload = {
-				id: user.id,
-				username: user.username,
-			};
-			const token = signToken(payload);
+      const payload = {
+        id: user.id,
+        username: user.username,
+      };
+      const token = signToken(payload);
 
-			//firstTime or not?
-			const firstTimeOrNot = await User.findOne({
-				where: {username: user.username},
-			});
+      //firstTime or not?
+      const firstTimeOrNot = await User.findOne({
+        where: { username: user.username },
+      });
 
-			res.status(200).json({
-				access_token: token,
-				username: user.username,
-				firstTime: firstTimeOrNot.firstTime,
-			});
-		} catch (error) {
-			next(error);
-		}
-	}
+      res.status(200).json({
+        access_token: token,
+        username: user.username,
+        firstTime: firstTimeOrNot.firstTime,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 
-	static async updateFirstTimeColumnPostgres(req, res, next) {
-		try {
-			const {id, username} = req.loginInfo;
-			await User.update(
-				{firstTime: "false"},
-				{
-					where: {id},
-				}
-			);
-			res.status(200).json({
-				message: `User id ${id} firstTime column successfully updated!`,
-			});
-		} catch (error) {
-			next(error);
-		}
-	}
+  static async updateFirstTimeColumnPostgres(req, res, next) {
+    try {
+      const { id, username } = req.loginInfo;
+      await User.update(
+        { firstTime: "false" },
+        {
+          where: { id },
+        }
+      );
+      res.status(200).json({
+        message: `User id ${id} firstTime column successfully updated!`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 
-	static async loginToCE(req, res, next) {
-		try {
-			const {id, username} = req.loginInfo;
+  static async addGroupToUser(req, res, next) {
+    try {
+      //   console.log(req.body, "========================"ss);
+      const group = req.body;
+      // console.log(group);
+      // console.log(req.params);
+      // const group = ["214844", "214845", "214848"];
+      const array = Array.from(group);
 
-			res.status(200).json({
-				PROJECT_ID: "ce7d3869-0c1b-4129-9299-5428dc2cd481",
-				USER_NAME: username,
-			});
-		} catch (error) {
-			next(error);
-		}
-	}
+      const UserId = req.loginInfo.id;
+      for (const el of array) {
+        const r2 = await axios.post(
+          `https://api.chatengine.io/chats/${el.id}/people/`,
+          { username: req.loginInfo.username },
+          {
+            headers: {
+              "Project-ID": "ce7d3869-0c1b-4129-9299-5428dc2cd481",
+              "User-Name": "cecep",
+              "User-Secret": "cecep",
+            },
+          }
+        );
+      }
 
-	static async addGroupToUser(req, res, next) {
-		try {
-			console.log(req.body);
-			const group = req.body;
-			// console.log(group);
-			// console.log(req.params);
-			// const group = ["214844", "214845", "214848"];
-			const array = Array.from(group);
+      for (const el of array) {
+        const groups = await Group.findAll();
 
-			const UserId = req.loginInfo.id;
-			for (const el of array) {
-				const r2 = await axios.post(
-					`https://api.chatengine.io/chats/${el.id}/people/`,
-					{username: req.loginInfo.username},
-					{
-						headers: {
-							"Project-ID": "ce7d3869-0c1b-4129-9299-5428dc2cd481",
-							"User-Name": "cecep",
-							"User-Secret": "cecep",
-						},
-					}
-				);
-			}
+        console.log(Array.isArray(groups));
+        const findOne = groups.find((group) => group.title == el.title);
+        console.log(findOne);
+        const response = await UserGroup.create({
+          UserId,
+          GroupId: findOne.id,
+        });
+        console.log(response);
+      }
+      res.status(201).json({ message: "success" });
 
-			for (const el of array) {
-				const groups = await Group.findAll();
+      // console.log(r2);
+    } catch (error) {
+      next(error);
+      console.log(error);
+    }
+  }
 
-				console.log(Array.isArray(groups));
-				const findOne = groups.find((group) => group.title == el.title);
-				console.log(findOne);
-				const response = await UserGroup.create({UserId, GroupId: findOne.id});
-				console.log(response);
-			}
-			res.status(201).json({message: "success"});
+  static async showGroupOfUser(req, res, next) {
+    try {
+      const user = req.loginInfo;
+      //console.log(user);
 
-			// console.log(r2);
-		} catch (error) {
-			next(error);
-			console.log(error);
-		}
-	}
+      const data = await UserGroup.findAll({
+        where: { UserId: user.id },
+        include: {
+          model: Group,
+        },
+      });
 
-	//? bingung
-	static async showGroupOfUser(req, res, next) {
-		try {
-			const user = req.loginInfo;
-			console.log(user);
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-			const data = await UserGroup.findAll({
-				where: {UserId: user.id},
-				include: {
-					model: Group,
-				},
-			});
-			res.status(200).json(data);
-		} catch (error) {
-			next(error);
-		}
-	}
-
-	static async deleteGroupOfUser(req, res, next) {
-		try {
-			const {id} = req.params;
-			console.log(req.loginInfo, ">>>>>>>>>>>>");
-			const r = await axios.put(
-				`https://api.chatengine.io/chats/${id}/people/`,
-				{username: req.loginInfo.username},
-				{
-					headers: {
-						"Project-ID": "ce7d3869-0c1b-4129-9299-5428dc2cd481",
-						"User-Name": "cecep",
-						"User-Secret": "cecep",
-					},
-				}
-			);
-			res.status(r.status).json(r.data);
-		} catch (error) {
-			next(error);
-			console.log(error);
-		}
-	}
+  static async deleteGroupOfUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      console.log(req.loginInfo, ">>>>>>>>>>>>");
+      const r = await axios.put(
+        `https://api.chatengine.io/chats/${id}/people/`,
+        { username: req.loginInfo.username },
+        {
+          headers: {
+            "Project-ID": "ce7d3869-0c1b-4129-9299-5428dc2cd481",
+            "User-Name": "cecep",
+            "User-Secret": "cecep",
+          },
+        }
+      );
+      res.status(r.status).json(r.data);
+    } catch (error) {
+      next(error);
+      console.log(error);
+    }
+  }
 }
 
 module.exports = Controller;
